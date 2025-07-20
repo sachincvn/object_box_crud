@@ -2,8 +2,21 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
 import 'local_storage.dart';
-import 'base_entity.dart';
 import '../../objectbox.g.dart';
+
+/// Configuration class for storage operations
+class StorageConfig<T> {
+  /// Function to extract ID from entity
+  final String Function(T) idExtractor;
+
+  /// Function to search entities
+  final bool Function(T, String) searchFunction;
+
+  const StorageConfig({
+    required this.idExtractor,
+    required this.searchFunction,
+  });
+}
 
 /// Generic ObjectBox implementation of LocalStorage
 /// This acts as a helper for local storage operations using ObjectBox
@@ -124,10 +137,7 @@ class ObjectBoxStorageHelper<T> implements LocalStorage<T> {
     try {
       // For updates, we need to find the existing item and preserve its objectBoxId
       final itemId = config.idExtractor(item);
-      print('🔄 Updating item with ID: $itemId');
-
       final allItems = _box.getAll();
-      print('📊 Total items in storage: ${allItems.length}');
 
       // Find existing item by business ID
       T? existingItem;
@@ -144,39 +154,29 @@ class ObjectBoxStorageHelper<T> implements LocalStorage<T> {
         final dynamic newDynamic = item;
 
         final int existingObjectBoxId = existingDynamic.objectBoxId ?? 0;
-        print('✅ Found existing item with ObjectBoxId: $existingObjectBoxId');
 
         try {
           if (existingObjectBoxId > 0) {
             // Set the objectBoxId on the new item
             newDynamic.objectBoxId = existingObjectBoxId;
-            print('🔧 Assigned ObjectBoxId $existingObjectBoxId to new item');
           }
 
           _box.put(item);
-          print('✅ Update successful');
           return item;
         } catch (e) {
           // If direct assignment fails, try to remove and re-add
-          print('⚠️ Direct objectBoxId assignment failed, trying remove/add: $e');
-
           if (existingObjectBoxId > 0) {
             _box.remove(existingObjectBoxId);
-            print('🗑️ Removed existing item with ObjectBoxId: $existingObjectBoxId');
           }
           _box.put(item);
-          print('✅ Re-added item successfully');
           return item;
         }
       } else {
         // Item not found, create new
-        print('⚠️ Item not found, creating new item');
         _box.put(item);
-        print('✅ New item created');
         return item;
       }
     } catch (e) {
-      print('❌ Update failed: $e');
       throw Exception('Failed to update ${entityType.toString()}: $e');
     }
   }

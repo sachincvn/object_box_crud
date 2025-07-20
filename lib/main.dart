@@ -21,34 +21,34 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppConstants.appName,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.deepPurple,
-          brightness: Brightness.light,
-        ),
-        useMaterial3: true,
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
-          elevation: 0,
-        ),
-        cardTheme: CardTheme(
-          elevation: AppConstants.defaultElevation,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppConstants.defaultRadius),
+    return BlocProvider(
+      create: (context) => Injector.get<UserBloc>()..add(const LoadUsers()),
+      child: MaterialApp(
+        title: AppConstants.appName,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.deepPurple,
+            brightness: Brightness.light,
+          ),
+          useMaterial3: true,
+          appBarTheme: const AppBarTheme(
+            centerTitle: true,
+            elevation: 0,
+          ),
+          cardTheme: CardTheme(
+            elevation: AppConstants.defaultElevation,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppConstants.defaultRadius),
+            ),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppConstants.defaultRadius),
+            ),
+            filled: true,
           ),
         ),
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(AppConstants.defaultRadius),
-          ),
-          filled: true,
-        ),
-      ),
-      home: BlocProvider(
-        create: (context) => Injector.get<UserBloc>()..add(const LoadUsers()),
-        child: const HomePage(),
+        home: const HomePage(),
       ),
     );
   }

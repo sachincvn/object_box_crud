@@ -105,10 +105,7 @@ class HomePage extends StatelessWidget {
   void _navigateToUserForm(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => BlocProvider.value(
-          value: context.read<UserBloc>(),
-          child: const SimpleUserForm(),
-        ),
+        builder: (context) => const SimpleUserForm(),
       ),
     );
   }

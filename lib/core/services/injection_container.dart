@@ -2,7 +2,6 @@ import 'package:get_it/get_it.dart';
 
 // Storage
 import '../storage/objectbox_storage_helper.dart';
-import '../storage/base_entity.dart';
 
 // Data Sources
 import '../../data/datasources/user_local_data_source.dart';

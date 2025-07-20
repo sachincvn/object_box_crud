@@ -69,10 +69,7 @@ class UserListWidget extends StatelessWidget {
   void _showEditDialog(BuildContext context, User user) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => BlocProvider.value(
-          value: context.read<UserBloc>(),
-          child: SimpleUserForm(user: user),
-        ),
+        builder: (context) => SimpleUserForm(user: user),
       ),
     );
   }
