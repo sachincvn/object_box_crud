@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      objectbox_generator|objectbox_generator:
+        enabled: true
+        options:
+          # Generate ObjectBox model files
+          lib_output_dir: lib
+      freezed|freezed:
+        enabled: true
+        options:
+          # Generate freezed files
+          explicit_to_json: true
+      json_serializable|json_serializable:
+        enabled: false  # We're not using JSON serialization with ObjectBox
